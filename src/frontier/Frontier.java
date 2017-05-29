@@ -14,7 +14,10 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import tiled.core.Map;
 import tiled.core.MapObject;
 import tiled.core.Tile;
@@ -47,7 +50,19 @@ public class Frontier extends Application {
 
         Canvas canvas = new Canvas(bounds.width * gameMap.getTileWidth(),
                                    bounds.height * gameMap.getTileHeightMax());
-        root.getChildren().add(canvas);
+        
+        HBox hbox = new HBox();
+        hbox.getChildren().add(canvas);
+        
+        //root.getChildren().add(canvas);
+        
+        
+        
+        
+        InfoWindow infoWindow = new InfoWindow();
+        hbox.getChildren().add(infoWindow);
+        root.getChildren().add(hbox);
+        
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
         
