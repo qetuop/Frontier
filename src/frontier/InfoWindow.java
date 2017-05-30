@@ -20,6 +20,9 @@ public class InfoWindow extends VBox {
         Label typeLabel = new Label("Type:");
         Label typeValue = new Label("Type Value");
         typeHbox.getChildren().addAll(typeLabel, typeValue);
-        this.getChildren().add(typeHbox);
+        
+        typeHbox.setStyle("-fx-border-color: black");
+        
+        this.getChildren().add(typeHbox);               
     }
 }
