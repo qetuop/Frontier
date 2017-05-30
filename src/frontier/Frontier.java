@@ -7,17 +7,22 @@ package frontier;
 
 import frontier.AStar.Node;
 import java.awt.Rectangle;
+import java.io.IOException;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import tiled.core.Map;
 import tiled.core.MapObject;
 import tiled.core.Tile;
@@ -28,6 +33,17 @@ import tiled.core.TileSet;
  * @author brian
  */
 public class Frontier extends Application {
+    
+    class Cursor {
+        int highlightX;
+        int highlightY;
+        int selectX;
+        int selectY;
+        boolean isSelected = false;
+        Tile highLightTile;
+        Tile selectTile;
+    }
+    
     private final GameBoard gameBoard;
     
     public Frontier() {
@@ -131,6 +147,49 @@ public class Frontier extends Application {
         // Render
         
         
+        theScene.setOnKeyPressed((KeyEvent e) -> {
+            String code = e.getCode().toString();
+            System.out.println("code: " + code);
+            
+            // only add once... prevent duplicates
+            //if ( !input.contains(code) )
+            //    input.add( code );
+        });
+
+        final Cursor cursor = new Cursor();
+        cursor.highLightTile = tileSet.getTile(8);
+        cursor.selectTile = tileSet.getTile(67);
+        
+        // highlight - mouse move
+        theScene.setOnMouseMoved((MouseEvent event) -> {            
+            int col = (int) (event.getX() / gameMap.getTileWidth());
+            int row = (int) (event.getY() / gameMap.getTileHeightMax());
+            //System.out.println(col + "," + row);
+            cursor.highlightX = col;
+            cursor.highlightY = row;            
+        });
+        
+        // Select mouse up
+        theScene.setOnMouseClicked((MouseEvent event) -> {   
+            MouseButton button = event.getButton();
+            if ( event.getButton() == MouseButton.PRIMARY ) {
+                cursor.isSelected = true;
+            }
+            else if ( event.getButton() == MouseButton.SECONDARY ) {
+                cursor.isSelected = false;
+            }
+            else {
+                return;
+            }
+            
+            int col = (int) (event.getX() / gameMap.getTileWidth());
+            int row = (int) (event.getY() / gameMap.getTileHeightMax());
+            //System.out.println(col + "," + row);
+            cursor.selectX = col;
+            cursor.selectY = row;
+        });
+        
+        
         // MAIN LOOP
         final long startNanoTime = System.nanoTime(); 
         new AnimationTimer()
@@ -148,7 +207,21 @@ public class Frontier extends Application {
                     lastUpdate = currentNanoTime;
                 }    
                 
-                gameBoard.drawGameBoard(gc);                
+                gameBoard.drawGameBoard(gc); 
+                
+                try {
+                    Tile tile = cursor.highLightTile;
+                    Image image = Utils.createImage(tile.getImage());
+                    gc.drawImage(image, cursor.highlightX * tile.getWidth(), cursor.highlightY * tile.getHeight());
+                    
+                    if ( cursor.isSelected == true ) {
+                        tile = cursor.selectTile;
+                        image = Utils.createImage(tile.getImage());
+                        gc.drawImage(image, cursor.selectX * tile.getWidth(), cursor.selectY * tile.getHeight());
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(GameBoard.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }.start();
         
