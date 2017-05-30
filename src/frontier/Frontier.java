@@ -33,23 +33,16 @@ import tiled.core.TileSet;
  * @author brian
  */
 public class Frontier extends Application {
-    
-    class Cursor {
-        int highlightX;
-        int highlightY;
-        int selectX;
-        int selectY;
-        boolean isSelected = false;
-        Tile highLightTile;
-        Tile selectTile;
-    }
-    
-    private final GameBoard gameBoard;
+            
+    //private final GameBoard gameBoard;
+    private final Game game = new Game();
     
     public Frontier() {
+        
         String mapName = "astar_8x6_32_dung.tmx";
+        game.createGameBoard(mapName);
        
-        this.gameBoard = new GameBoard("/home/brian/NetBeansProjects/JAVA/GameTest/resources/"+mapName);
+        //this.gameBoard = new GameBoard("/home/brian/NetBeansProjects/JAVA/GameTest/resources/"+mapName);
     }
     
     @Override
@@ -61,7 +54,7 @@ public class Frontier extends Application {
         primaryStage.setScene(theScene);
 
         ////////////////////
-        Map gameMap = gameBoard.getMap();
+        Map gameMap = game.gameBoard.getMap();
         Rectangle bounds = gameMap.getBounds();
 
         Canvas canvas = new Canvas(bounds.width * gameMap.getTileWidth(),
@@ -88,58 +81,21 @@ public class Frontier extends Application {
         TileSet tileSet = gameMap.getTileSets().get(0);
         
         //////////// PLAYER //////////
-        int startX = 0;
-        int startY = 0;
-        MapObject mapObject = gameBoard.getObject("spawn");
-        if ( mapObject != null ) {
-            startX = (int) (mapObject.getX()/mapObject.getWidth()); // --> Tile coord ex: (2,3)
-            startY = (int) (mapObject.getY()/mapObject.getHeight());
-            
-            //double startXd = Math.max(0, mapObject.getX() - mapObject.getWidth()); // --> actual X,Y coord to draw at ex: (2*32, 3*32)
-            //double startYd = Math.max(0, mapObject.getY() - mapObject.getHeight());
-            
-            //System.out.println(startX + "," +startY + " / " + startXd + "," +  startYd);
-        }
-        
-        Tile tile = tileSet.getTile(132);
-        Humanoid player = new Humanoid(tile,startX,startY);
-        gameBoard.humanoidList.add(player);
-        gameBoard.spriteList.add(player);
+        //int startX = 0;
+        //int startY = 0;
+        //MapObject mapObject = game.gameBoard.getObject("spawn");
+
+        Humanoid player = game.createHumanoid(0,0);
         astar.spriteList.add(player);
         
         //////////// TREE //////////
-        startX = 0;
-        startY = 0;
-        mapObject = gameBoard.getObject("resource");
-        if ( mapObject != null ) {
-            startX = (int) (mapObject.getX()/mapObject.getWidth());
-            startY = (int) (mapObject.getY()/mapObject.getHeight());
-            
-            
-        }
-
-        tile = tileSet.getTile(1164);
-        Resource resourceTree = new Resource(tile,startX,startY);
-        gameBoard.resourceList.add(resourceTree);
-        gameBoard.spriteList.add(resourceTree);
+        Resource resourceTree = game.createResource(0, 0, "resource", 1164);
         astar.spriteList.add(resourceTree);
-        
+               
         //////////// CHEST //////////
-        startX = 0;
-        startY = 0;
-        mapObject = gameBoard.getObject("storage");
-        if ( mapObject != null ) {
-            startX = (int) (mapObject.getX()/mapObject.getWidth());
-            startY = (int) (mapObject.getY()/mapObject.getHeight());
-        }
-
-        tile = tileSet.getTile(2925);
-        Resource resourceStorage = new Resource(tile,startX,startY);
-        gameBoard.resourceList.add(resourceStorage);
-        gameBoard.spriteList.add(resourceStorage);
-        astar.spriteList.add(resourceStorage);
-        //
-        
+        Resource chest = game.createResource(0, 0, "storage", 2925);
+        astar.spriteList.add(chest);
+                
         LinkedList<Node> path = astar.findPath( player.positionX, player.positionY, 
                                                 resourceTree.positionX, resourceTree.positionY);
         player.path = path;
@@ -156,37 +112,15 @@ public class Frontier extends Application {
             //    input.add( code );
         });
 
-        final Cursor cursor = new Cursor();
-        cursor.highLightTile = tileSet.getTile(8);
-        cursor.selectTile = tileSet.getTile(67);
-        
+      
         // highlight - mouse move
-        theScene.setOnMouseMoved((MouseEvent event) -> {            
-            int col = (int) (event.getX() / gameMap.getTileWidth());
-            int row = (int) (event.getY() / gameMap.getTileHeightMax());
-            //System.out.println(col + "," + row);
-            cursor.highlightX = col;
-            cursor.highlightY = row;            
+        theScene.setOnMouseMoved((MouseEvent event) -> {                        
+            game.cursor.mouseMoved(event);
         });
         
         // Select mouse up
         theScene.setOnMouseClicked((MouseEvent event) -> {   
-            MouseButton button = event.getButton();
-            if ( event.getButton() == MouseButton.PRIMARY ) {
-                cursor.isSelected = true;
-            }
-            else if ( event.getButton() == MouseButton.SECONDARY ) {
-                cursor.isSelected = false;
-            }
-            else {
-                return;
-            }
-            
-            int col = (int) (event.getX() / gameMap.getTileWidth());
-            int row = (int) (event.getY() / gameMap.getTileHeightMax());
-            //System.out.println(col + "," + row);
-            cursor.selectX = col;
-            cursor.selectY = row;
+            game.cursor.mouseClicked(event);
         });
         
         
@@ -207,21 +141,9 @@ public class Frontier extends Application {
                     lastUpdate = currentNanoTime;
                 }    
                 
-                gameBoard.drawGameBoard(gc); 
+                game.gameBoard.drawGameBoard(gc); 
                 
-                try {
-                    Tile tile = cursor.highLightTile;
-                    Image image = Utils.createImage(tile.getImage());
-                    gc.drawImage(image, cursor.highlightX * tile.getWidth(), cursor.highlightY * tile.getHeight());
-                    
-                    if ( cursor.isSelected == true ) {
-                        tile = cursor.selectTile;
-                        image = Utils.createImage(tile.getImage());
-                        gc.drawImage(image, cursor.selectX * tile.getWidth(), cursor.selectY * tile.getHeight());
-                    }
-                } catch (IOException ex) {
-                    Logger.getLogger(GameBoard.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                game.cursor.render(gc);
             }
         }.start();
         
