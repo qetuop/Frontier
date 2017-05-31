@@ -48,6 +48,10 @@ public class Cursor {
             //System.out.println(col + "," + row);
             highlightX = col;
             highlightY = row;   
+            
+            game.infoWindow.col = col;
+            game.infoWindow.row = row;
+            game.infoWindow.update();           
         }
         
         public void mouseClicked(MouseEvent event) {

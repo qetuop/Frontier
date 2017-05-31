@@ -25,6 +25,7 @@ public class Game {
     public HBox mainPane;
     GraphicsContext gc;
     AStar astar;
+    InfoWindow infoWindow;
     
     // internal board object?
     
@@ -65,8 +66,9 @@ public class Game {
         HBox hbox = new HBox();
         hbox.getChildren().add(canvas);
         
-        InfoWindow infoWindow = new InfoWindow();
-        hbox.getChildren().add(infoWindow.vbox);
+        infoWindow = new InfoWindow();
+        infoWindow.gameMap = gameMap;
+        hbox.getChildren().add(infoWindow.vBox);
         
         mainPane.getChildren().add(hbox);
                 
