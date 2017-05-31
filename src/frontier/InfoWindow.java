@@ -13,9 +13,13 @@ import javafx.scene.layout.VBox;
  *
  * @author brian
  */
-public class InfoWindow extends VBox {
+public class InfoWindow {
+    VBox vbox;
+    Sprite sprite;
     
     public InfoWindow() {
+        vbox = new VBox();
+        
         HBox typeHbox = new HBox();
         Label typeLabel = new Label("Type:");
         Label typeValue = new Label("Type Value");
@@ -23,6 +27,6 @@ public class InfoWindow extends VBox {
         
         typeHbox.setStyle("-fx-border-color: black");
         
-        this.getChildren().add(typeHbox);               
+        vbox.getChildren().add(typeHbox);               
     }
 }

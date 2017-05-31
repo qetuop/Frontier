@@ -5,8 +5,13 @@
  */
 package frontier;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.HBox;
+import tiled.core.Map;
 import tiled.core.MapObject;
 import tiled.core.Tile;
 import tiled.core.TileSet;
@@ -17,6 +22,9 @@ import tiled.core.TileSet;
  */
 public class Game {
     public GameBoard gameBoard; // Tiled objects
+    public HBox mainPane;
+    GraphicsContext gc;
+    AStar astar;
     
     // internal board object?
     
@@ -38,11 +46,31 @@ public class Game {
     public Game() {
         resources = new ArrayList<>();
         humanoids = new ArrayList<>();
+        
+        mainPane = new HBox();
     }
     
     public void createGameBoard(String mapName) {
         gameBoard = new GameBoard("/home/brian/NetBeansProjects/JAVA/GameTest/resources/"+mapName);
         cursor = new Cursor(this); // TODO: should move out, but need GameBoard created first
+        
+        ////////////////////
+        Map gameMap = gameBoard.getMap();
+        Rectangle bounds = gameMap.getBounds();
+
+        Canvas canvas = new Canvas(bounds.width * gameMap.getTileWidth(),
+                                   bounds.height * gameMap.getTileHeightMax());
+        gc = canvas.getGraphicsContext2D();
+        
+        HBox hbox = new HBox();
+        hbox.getChildren().add(canvas);
+        
+        InfoWindow infoWindow = new InfoWindow();
+        hbox.getChildren().add(infoWindow.vbox);
+        
+        mainPane.getChildren().add(hbox);
+                
+        astar = new AStar(gameMap);
     }
     
     public Humanoid createHumanoid(int startX, int startY) {
@@ -93,10 +121,31 @@ public class Game {
     }
     
     public void update() {
-        
+        for (Humanoid humanoid : humanoids) {
+            humanoid.moveChar();
+        }
     }
     
-    public void render(GraphicsContext gc) {
+    public void render() {
+        gameBoard.drawGameBoard(gc);
+        cursor.render(gc);
+    }
+
+    void TMP_HACK() {
+        //////////// PLAYER //////////
+        Humanoid player = createHumanoid(0,0);
+        astar.spriteList.add(player);
         
+        //////////// TREE //////////
+        Resource resourceTree = createResource(0, 0, "resource", 1164);
+        astar.spriteList.add(resourceTree);
+               
+        //////////// CHEST //////////
+        Resource chest = createResource(0, 0, "storage", 2925);
+        astar.spriteList.add(chest);
+                
+        LinkedList<AStar.Node> path = astar.findPath( player.positionX, player.positionY, 
+                                                resourceTree.positionX, resourceTree.positionY);
+        player.path = path;
     }
 }
