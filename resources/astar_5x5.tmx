@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="2017.05.16" orientation="orthogonal" renderorder="right-down" width="5" height="5" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" source="gameTest_tile.tsx"/>
+ <layer name="Tile Layer 1" width="5" height="5">
+  <data encoding="csv">
+3,2,3,3,3,
+3,2,3,3,3,
+3,3,3,3,3,
+3,3,3,3,3,
+3,3,3,3,3
+</data>
+ </layer>
+ <layer name="Tile Layer 2" width="5" height="5">
+  <data encoding="csv">
+0,0,0,0,1,
+0,0,0,0,0,
+0,0,0,0,0,
+0,0,0,0,0,
+0,0,0,0,0
+</data>
+ </layer>
+</map>

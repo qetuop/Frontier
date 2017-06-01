@@ -1,0 +1,38 @@
+{ "height":4,
+ "layers":[
+        {
+         "data":[3, 3, 3, 3, 3, 2, 3, 3, 3, 2, 2, 3, 3, 3, 3, 3],
+         "height":4,
+         "name":"background",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":4,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "data":[0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 4, 0, 0, 0],
+         "height":4,
+         "name":"objects",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":4,
+         "x":0,
+         "y":0
+        }],
+ "nextobjectid":1,
+ "orientation":"orthogonal",
+ "renderorder":"right-down",
+ "tileheight":32,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "source":"gameTest_tile.tsx"
+        }],
+ "tilewidth":32,
+ "type":"map",
+ "version":"2017.05.16",
+ "width":4
+}
