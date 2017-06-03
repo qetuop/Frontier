@@ -38,7 +38,26 @@
  </tile>
  <tile id="1028">
   <properties>
-   <property name="blocked" type="bool" value="true"/>
+   <property name="blocked" value="true"/>
+   <property name="name" value="wall"/>
+  </properties>
+ </tile>
+ <tile id="1029">
+  <properties>
+   <property name="blocked" value="true"/>
+   <property name="name" value="wall"/>
+  </properties>
+ </tile>
+ <tile id="1030">
+  <properties>
+   <property name="blocked" value="true"/>
+   <property name="name" value="wall"/>
+  </properties>
+ </tile>
+ <tile id="1031">
+  <properties>
+   <property name="blocked" value="true"/>
+   <property name="name" value="wall"/>
   </properties>
  </tile>
  <tile id="1164" type="resource">

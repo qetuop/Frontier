@@ -64,6 +64,19 @@ public class Sprite {
         return rv;
     }
     
+    public String getProp(String property) {
+        String rv = "";
+        Properties prop = tile.getProperties();
+        
+        try {
+            rv =  (String) prop.get(property);
+        } catch (Exception ex) {
+            Logger.getLogger(Sprite.class.getName()).log(Level.INFO, null, ex);
+        }
+        
+        return rv;
+    }
+    
     
     
  

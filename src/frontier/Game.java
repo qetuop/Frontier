@@ -22,6 +22,7 @@ import tiled.core.TileSet;
  */
 public class Game {
     public GameBoard gameBoard; // Tiled objects
+    public SpriteMap spriteMap;
     public HBox mainPane;
     GraphicsContext gc;
     AStar astar;
@@ -52,7 +53,7 @@ public class Game {
     }
     
     public void createGameBoard(String mapName) {
-        gameBoard = new GameBoard("/home/brian/NetBeansProjects/JAVA/GameTest/resources/"+mapName);
+        gameBoard = new GameBoard("/home/brian/NetBeansProjects/JAVA/Frontier/resources/"+mapName);
         cursor = new Cursor(this); // TODO: should move out, but need GameBoard created first
         
         ////////////////////
@@ -73,6 +74,8 @@ public class Game {
         mainPane.getChildren().add(hbox);
                 
         astar = new AStar(gameMap);
+        spriteMap = new SpriteMap(gameMap);
+        spriteMap.print();
     }
     
     public Humanoid createHumanoid(int startX, int startY) {

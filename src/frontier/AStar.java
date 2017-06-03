@@ -106,7 +106,7 @@ public class AStar extends Application {
         int numRows = tileLayer.getHeight();
         
         Node[][] nodeArr = new Node[numRows][numCols]; // row major order
-        System.out.println("numRows="+ numRows +", numCols=" + numCols);
+        //System.out.println("numRows="+ numRows +", numCols=" + numCols);
         for (int col = 0; col < numCols; col++) {
             for (int row = 0; row < numCols; row++) {
                
@@ -131,14 +131,14 @@ public class AStar extends Application {
         
         openSet.add(startNode);
         
-        System.out.println("START NODE: " + startNode);
-        System.out.println("Dest  NODE: " + endNode);             
+        //System.out.println("START NODE: " + startNode);
+        //System.out.println("Dest  NODE: " + endNode);             
         
         Node current = null;
         // while the openSet is not empty AND the end not reached
         while ( !openSet.isEmpty() && !closedSet.contains(endNode) ) {
             current = lowestF(openSet);
-            System.out.println("lowest="+current);
+            //System.out.println("lowest="+current);
             if ( current == endNode ){
                 createPath(current);
                 break;
@@ -149,7 +149,7 @@ public class AStar extends Application {
             
             // get valid surrounding nodes - not blocked, in closedSet, ...
             HashSet<Node> surround = getSurrounding(nodeArr, numCols, numRows, current.x, current.y);
-            System.out.println("surrounding: " + surround.size());
+            //System.out.println("surrounding: " + surround.size());
             //surround.forEach(System.out::println);
             //surround.forEach(s -> calcCost(s));
             for ( Node node : surround ) { 
@@ -157,7 +157,7 @@ public class AStar extends Application {
                 calcG(node);
                 calcH(node);
                 calcF(node);
-                System.out.println(node);
+                //System.out.println(node);
                 openSet.add(node);
             }
             
@@ -165,8 +165,8 @@ public class AStar extends Application {
         
         
         
-        System.out.println("final path:");
-        finalPath.forEach(System.out::println);
+        //System.out.println("final path:");
+        //finalPath.forEach(System.out::println);
         
         return finalPath;
 
