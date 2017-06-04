@@ -49,9 +49,9 @@ public class Cursor {
             highlightX = col;
             highlightY = row;   
             
-            game.infoWindow.col = col;
-            game.infoWindow.row = row;
-            game.infoWindow.update();           
+            //game.infoWindow.col = col;
+            //game.infoWindow.row = row;
+            game.infoWindow.update(col,row);           
         }
         
         public void mouseClicked(MouseEvent event) {

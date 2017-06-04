@@ -70,7 +70,7 @@ public class AStar extends Application {
     
     Map map;
     
-    public AStar(Map map) {
+    public AStar(Map map, SpriteMap spriteMap) {
         spriteList   = new ArrayList<>();
         
         this.map = map;

@@ -84,7 +84,7 @@ public class GameBoard {
         }
 
     }
-    
+    /*
     public void drawGameBoard(GraphicsContext gc) {
         // TODO: only draw whats on the screen
         
@@ -177,5 +177,5 @@ public class GameBoard {
 
         return rv;
     } // getObject
-    
+    */
 } // class GameBoard

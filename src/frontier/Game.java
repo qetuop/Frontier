@@ -54,7 +54,7 @@ public class Game {
     
     public void createGameBoard(String mapName) {
         gameBoard = new GameBoard("/home/brian/NetBeansProjects/JAVA/Frontier/resources/"+mapName);
-        cursor = new Cursor(this); // TODO: should move out, but need GameBoard created first
+        cursor = new Cursor(this); // TODO: should move out?  gameboard?
         
         ////////////////////
         Map gameMap = gameBoard.getMap();
@@ -67,15 +67,19 @@ public class Game {
         HBox hbox = new HBox();
         hbox.getChildren().add(canvas);
         
-        infoWindow = new InfoWindow();
-        infoWindow.gameMap = gameMap;
-        hbox.getChildren().add(infoWindow.vBox);
+               
         
-        mainPane.getChildren().add(hbox);
-                
-        astar = new AStar(gameMap);
-        spriteMap = new SpriteMap(gameMap);
+        spriteMap = new SpriteMap(gameMap, humanoids, resources);
         spriteMap.print();
+        
+        astar = new AStar(gameMap, spriteMap);
+        
+        infoWindow = new InfoWindow(spriteMap);
+        infoWindow.gameMap = gameMap;
+        hbox.getChildren().add(infoWindow.mainHBox);
+        
+        mainPane.getChildren().add(hbox);         
+        mainPane.setPrefWidth(400);
     }
     
     public Humanoid createHumanoid(int startX, int startY) {
@@ -93,7 +97,7 @@ public class Game {
             //System.out.println(startX + "," +startY + " / " + startXd + "," +  startYd);
         }
         */
-        Resource resource = spriteMap.getResource("spawn");
+        Resource resource = getResource("spawn");
         if ( resource != null ) {
             startX = resource.positionX;
             startY  = resource.positionY;
@@ -112,7 +116,7 @@ public class Game {
         return humanoid;
     }
     
-    public Resource createResource(int startX, int startY, String type, int id) {
+    public Resource createResource(int startX, int startY, String name, int id) {
         //Resource resource = null;
         
         /*
@@ -122,7 +126,7 @@ public class Game {
             startY = (int) (mapObject.getY()/mapObject.getHeight());
         }
         */
-        Resource resource = spriteMap.getResource(type);
+        Resource resource = getResource(name);
 //        if ( resource != null ) {
 //            startX = r.positionX;
 //            startY  = r.positionY;
@@ -169,5 +173,16 @@ public class Game {
         LinkedList<AStar.Node> path = astar.findPath( player.positionX, player.positionY, 
                                                 resourceTree.positionX, resourceTree.positionY);
         player.path = path;
+    }
+    
+    public Resource getResource(String name){
+        Resource resource = null;
+        for ( Resource r: resources ){
+            if ( r.getProp("name").compareTo(name) == 0 ) {
+                resource = r;
+                break;
+            }
+        }
+        return resource;
     }
 }

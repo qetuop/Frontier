@@ -24,13 +24,12 @@ import tiled.core.TileLayer;
  */
 public class SpriteMap {
     ArrayList<ArrayList<ArrayList<Sprite>>> map; // [col][row][Sprite list]
-    ArrayList<Resource> resources; // TODO: need better wy to store, map?
+    //ArrayList<Resource> resources; // TODO: need better wy to store, map?
     
-    public SpriteMap(Map gameMap) {
-        resources = new ArrayList<>();
+    public SpriteMap(Map gameMap,ArrayList<Humanoid> humanoids, ArrayList<Resource>  resources) {
+        //resources = new ArrayList<>();
         
-        map = new ArrayList<>();
-        
+        map = new ArrayList<>();        
         
         for ( MapLayer layer : gameMap ) {
             
@@ -67,6 +66,11 @@ public class SpriteMap {
                             map.get(row).get(col).add(new Sprite(tile, col, row));
                         }
                         else if ( type.compareTo("resource") == 0 ) {
+                            Resource resource = new Resource(tile, col, row);
+                            map.get(row).get(col).add(resource);
+                            resources.add(resource);
+                        }
+                        else if ( type.compareTo("humanoid") == 0 ) {
                             Resource resource = new Resource(tile, col, row);
                             map.get(row).get(col).add(resource);
                             resources.add(resource);
@@ -116,15 +120,26 @@ public class SpriteMap {
         }
     }
     
-    public Resource getResource(String name){
-        Resource resource = null;
-        for ( Resource r: resources ){
-            if ( r.getProp("name").compareTo(name) == 0 ) {
-                resource = r;
-                break;
-            }
+    public ArrayList<Sprite> getCoord( int row, int col ) {
+        ArrayList<Sprite> rv = new ArrayList<Sprite>();
+        
+        if ( row >=0 && row < map.size() &&
+             col >=0 && col < map.get(row).size() ) {
+            rv = map.get(row).get(col);
         }
-        return resource;
+        
+        return rv;
     }
+    
+//    public Resource getResource(String name){
+//        Resource resource = null;
+//        for ( Resource r: resources ){
+//            if ( r.getProp("name").compareTo(name) == 0 ) {
+//                resource = r;
+//                break;
+//            }
+//        }
+//        return resource;
+//    }
     
 } // class SpriteMap
