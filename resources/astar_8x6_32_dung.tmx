@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="2017.05.26" orientation="orthogonal" renderorder="right-down" width="8" height="6" tilewidth="32" tileheight="32" nextobjectid="22">
+<map version="2017.05.26" orientation="orthogonal" renderorder="right-down" width="8" height="6" tilewidth="32" tileheight="32" nextobjectid="31">
  <tileset firstgid="1" source="dungeon.tsx"/>
  <layer name="background" width="8" height="6">
   <data encoding="csv">
@@ -11,28 +11,14 @@
 966,966,966,966,966,966,966,966
 </data>
  </layer>
- <layer name="items" width="8" height="6">
+ <layer name="resources" width="8" height="6">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,
+990,0,0,0,0,0,1165,0,
+2924,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="object">
-  <object id="6" name="spawn" x="0" y="64" width="32" height="32"/>
-  <object id="15" name="resource" x="192" y="64" width="32" height="32">
-   <properties>
-    <property name="blocked" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="17" x="192" y="-161"/>
-  <object id="20" name="storage" x="0" y="96" width="32" height="32">
-   <properties>
-    <property name="blocked" type="bool" value="true"/>
-   </properties>
-  </object>
- </objectgroup>
 </map>

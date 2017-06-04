@@ -36,6 +36,13 @@
    <property name="name" value="grass"/>
   </properties>
  </tile>
+ <tile id="989" type="resource">
+  <properties>
+   <property name="blocked" type="bool" value="false"/>
+   <property name="name" value="spawn"/>
+   <property name="type" value="resource"/>
+  </properties>
+ </tile>
  <tile id="1028">
   <properties>
    <property name="blocked" value="true"/>
@@ -64,36 +71,59 @@
   <properties>
    <property name="blocked" value="true"/>
    <property name="name" value="tree"/>
+   <property name="type" value="resource"/>
   </properties>
  </tile>
  <tile id="1165" type="resource">
   <properties>
    <property name="blocked" value="true"/>
    <property name="name" value="tree"/>
+   <property name="type" value="resource"/>
   </properties>
  </tile>
  <tile id="1166" type="resource">
   <properties>
    <property name="blocked" value="true"/>
    <property name="name" value="tree"/>
+   <property name="type" value="resource"/>
   </properties>
  </tile>
  <tile id="1167" type="resource">
   <properties>
    <property name="blocked" value="true"/>
    <property name="name" value="tree"/>
+   <property name="type" value="resource"/>
   </properties>
  </tile>
  <tile id="1168" type="resource">
   <properties>
    <property name="blocked" value="true"/>
    <property name="name" value="tree"/>
+   <property name="type" value="resource"/>
   </properties>
  </tile>
  <tile id="1169" type="resource">
   <properties>
    <property name="blocked" value="true"/>
    <property name="name" value="tree"/>
+   <property name="type" value="resource"/>
+  </properties>
+ </tile>
+ <tile id="2923" type="resource">
+  <properties>
+   <property name="blocked" type="bool" value="false"/>
+   <property name="name" value="storage"/>
+   <property name="type" value="resource"/>
+  </properties>
+ </tile>
+ <tile id="2924">
+  <properties>
+   <property name="type" value="resource"/>
+  </properties>
+ </tile>
+ <tile id="2925">
+  <properties>
+   <property name="type" value="resource"/>
   </properties>
  </tile>
 </tileset>

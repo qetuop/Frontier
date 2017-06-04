@@ -81,6 +81,7 @@ public class Game {
     public Humanoid createHumanoid(int startX, int startY) {
         Humanoid humanoid = null;
         
+        /*
         MapObject mapObject = gameBoard.getObject("spawn");
         if ( mapObject != null ) {
             startX = (int) (mapObject.getX()/mapObject.getWidth()); // --> Tile coord ex: (2,3)
@@ -91,6 +92,13 @@ public class Game {
             
             //System.out.println(startX + "," +startY + " / " + startXd + "," +  startYd);
         }
+        */
+        Resource resource = spriteMap.getResource("spawn");
+        if ( resource != null ) {
+            startX = resource.positionX;
+            startY  = resource.positionY;
+        }
+        
         TileSet tileSet = gameBoard.getMap().getTileSets().get(0);
         Tile tile = tileSet.getTile(132);
         humanoid = new Humanoid(tile,startX,startY);
@@ -105,16 +113,24 @@ public class Game {
     }
     
     public Resource createResource(int startX, int startY, String type, int id) {
-        Resource resource = null;
+        //Resource resource = null;
         
+        /*
         MapObject mapObject = gameBoard.getObject(type);
         if ( mapObject != null ) {
             startX = (int) (mapObject.getX()/mapObject.getWidth()); // --> Tile coord ex: (2,3)
             startY = (int) (mapObject.getY()/mapObject.getHeight());
         }
+        */
+        Resource resource = spriteMap.getResource(type);
+//        if ( resource != null ) {
+//            startX = r.positionX;
+//            startY  = r.positionY;
+//        }
+        
         TileSet tileSet = gameBoard.getMap().getTileSets().get(0);
         Tile tile = tileSet.getTile(id);
-        resource = new Resource(tile,startX,startY);
+        //resource = new Resource(tile,startX,startY);
         
         resources.add(resource);
         
@@ -132,7 +148,8 @@ public class Game {
     }
     
     public void render() {
-        gameBoard.drawGameBoard(gc);
+        //gameBoard.drawGameBoard(gc);
+        gameBoard.render(spriteMap,gc);
         cursor.render(gc);
     }
 
@@ -142,7 +159,7 @@ public class Game {
         astar.spriteList.add(player);
         
         //////////// TREE //////////
-        Resource resourceTree = createResource(0, 0, "resource", 1164);
+        Resource resourceTree = createResource(0, 0, "tree", 1164);
         astar.spriteList.add(resourceTree);
                
         //////////// CHEST //////////

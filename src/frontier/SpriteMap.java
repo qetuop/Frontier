@@ -8,6 +8,9 @@ package frontier;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import tiled.core.Map;
 import tiled.core.MapLayer;
 import tiled.core.MapObject;
@@ -21,8 +24,10 @@ import tiled.core.TileLayer;
  */
 public class SpriteMap {
     ArrayList<ArrayList<ArrayList<Sprite>>> map; // [col][row][Sprite list]
+    ArrayList<Resource> resources; // TODO: need better wy to store, map?
     
     public SpriteMap(Map gameMap) {
+        resources = new ArrayList<>();
         
         map = new ArrayList<>();
         
@@ -49,8 +54,23 @@ public class SpriteMap {
                         if (tile == null) {
                             continue;
                         }
+                        Properties prop = tile.getProperties();
+                        String type = null;
+                        try {
+                           type = (String) prop.get("type");
+                           System.out.println("type="+type);
+                        } catch (Exception ex) {
+                            Logger.getLogger(Sprite.class.getName()).log(Level.INFO, null, ex);
+                        }
                         
-                        map.get(row).get(col).add(new Sprite(tile, col, row));
+                        if ( type == null ) {
+                            map.get(row).get(col).add(new Sprite(tile, col, row));
+                        }
+                        else if ( type.compareTo("resource") == 0 ) {
+                            Resource resource = new Resource(tile, col, row);
+                            map.get(row).get(col).add(resource);
+                            resources.add(resource);
+                        }
 
 
                     } // col
@@ -67,6 +87,15 @@ public class SpriteMap {
                     if (tile == null) {
                         continue;
                     }
+                    
+                     Properties prop = tile.getProperties();
+
+                        try {
+                           String type = (String) prop.get("type");
+                            System.out.println("object type="+type);
+                        } catch (Exception ex) {
+                            Logger.getLogger(Sprite.class.getName()).log(Level.INFO, null, ex);
+                        }
 
                     
                 } // for each object
@@ -81,9 +110,21 @@ public class SpriteMap {
             for ( int col = 0; col < map.get(row).size(); col++ ){
                 for ( int spriteNum = 0; spriteNum < map.get(row).get(col).size(); spriteNum++ ){
                     Sprite sprite = map.get(row).get(col).get(spriteNum);
-                    System.out.println("("+row+","+col+"): " + sprite.getProp("name"));
+                    System.out.println("("+row+","+col+")[" + spriteNum + "]: " + sprite.getProp("name"));
                 }
             }
         }
     }
+    
+    public Resource getResource(String name){
+        Resource resource = null;
+        for ( Resource r: resources ){
+            if ( r.getProp("name").compareTo(name) == 0 ) {
+                resource = r;
+                break;
+            }
+        }
+        return resource;
+    }
+    
 } // class SpriteMap

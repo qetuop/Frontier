@@ -49,6 +49,42 @@ public class GameBoard {
         return gameMap;
     }
     
+    public void render(SpriteMap spriteMap, GraphicsContext gc){
+        ArrayList<ArrayList<ArrayList<Sprite>>> map = spriteMap.map;
+        for (int row = 0; row < map.size(); row++) {
+            for (int col = 0; col < map.get(row).size(); col++) {
+                for (int spriteNum = 0; spriteNum < map.get(row).get(col).size(); spriteNum++) {
+                    Sprite sprite = map.get(row).get(col).get(spriteNum);
+                    Tile tile = sprite.tile;
+
+                    if (tile == null) {
+                        continue;
+                    }
+
+                    try {
+                        Image image = Utils.createImage(tile.getImage());
+                        gc.drawImage(image, col * tile.getWidth(), row * tile.getHeight());
+                    } catch (IOException ex) {
+                        Logger.getLogger(GameBoard.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+
+        // draw humanoids
+        for (Sprite sprite : spriteList) {
+            try {
+
+                Image image = Utils.createImage(sprite.tile.getImage());
+
+                gc.drawImage(image, sprite.positionX * image.getWidth(), sprite.positionY * image.getHeight());
+            } catch (IOException ex) {
+                Logger.getLogger(GameBoard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
+    
     public void drawGameBoard(GraphicsContext gc) {
         // TODO: only draw whats on the screen
         

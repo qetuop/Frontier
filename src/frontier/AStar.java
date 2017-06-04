@@ -276,8 +276,9 @@ public class AStar extends Application {
 //        }).count();
 //        System.out.println("blocked="+blocked);
 
-        valid = (!closedSet.contains(node)
-                && !blockedTypes.contains(node.type));
+        valid = (node != null &&
+                !closedSet.contains(node) &&
+                !blockedTypes.contains(node.type));
 //
 //        if (closedSet.contains(node)) {
 //            valid = false;
