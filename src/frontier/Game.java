@@ -70,7 +70,7 @@ public class Game {
                
         
         spriteMap = new SpriteMap(gameMap, humanoids, resources);
-        spriteMap.print();
+        //spriteMap.print();
         
         astar = new AStar(gameMap, spriteMap);
         

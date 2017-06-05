@@ -57,7 +57,7 @@ public class SpriteMap {
                         String type = null;
                         try {
                            type = (String) prop.get("type");
-                           System.out.println("type="+type);
+                           //System.out.println("type="+type);
                         } catch (Exception ex) {
                             Logger.getLogger(Sprite.class.getName()).log(Level.INFO, null, ex);
                         }
@@ -71,9 +71,9 @@ public class SpriteMap {
                             resources.add(resource);
                         }
                         else if ( type.compareTo("humanoid") == 0 ) {
-                            Resource resource = new Resource(tile, col, row);
-                            map.get(row).get(col).add(resource);
-                            resources.add(resource);
+                            Humanoid sp = new Humanoid(tile, col, row);
+                            map.get(row).get(col).add(sp);
+                            //resources.add(resource);
                         }
 
 
@@ -96,7 +96,7 @@ public class SpriteMap {
 
                         try {
                            String type = (String) prop.get("type");
-                            System.out.println("object type="+type);
+                            //System.out.println("object type="+type);
                         } catch (Exception ex) {
                             Logger.getLogger(Sprite.class.getName()).log(Level.INFO, null, ex);
                         }

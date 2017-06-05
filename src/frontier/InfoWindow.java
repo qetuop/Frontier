@@ -10,9 +10,11 @@ import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import tiled.core.Map;
@@ -48,10 +50,11 @@ public class InfoWindow {
         infoVBox = new VBox();
         infoVBox.setStyle("-fx-border-color: red");
         infoVBox.setPrefHeight(100);
-        
+        //infoVBox.setPrefWidth(100);
+               
         cmdVBox = new VBox();
         cmdVBox.setStyle("-fx-border-color: green");
-        cmdVBox.setPrefHeight(100);
+        cmdVBox.setPrefWidth(100);
         
         mainHBox.getChildren().addAll(infoVBox, cmdVBox);
         
@@ -62,15 +65,19 @@ public class InfoWindow {
         infoBox.setPrefWidth(100);
 
         Label infoLabel = new Label("Terrain");
-        infoBox.getChildren().add(infoLabel);
+        //infoBox.getChildren().add(infoLabel);
 
         Tile tile = sprite.tile;
         if (tile != null) {
             Label typeValue = new Label();
+            TextField typeTF = new TextField();
+            typeTF.setEditable(false);
+            
             Properties prop = tile.getProperties();
 
             try {
                 typeValue.setText((String) prop.get("name"));
+                typeTF.setText((String) prop.get("name"));
             } catch (Exception ex) {
                 Logger.getLogger(InfoWindow.class.getName()).log(Level.INFO, null, ex);
             }
@@ -84,16 +91,16 @@ public class InfoWindow {
             }
 
             HBox typeHbox = new HBox();
-            typeHbox.getChildren().addAll(typeValue, canvas);
+            typeHbox.getChildren().addAll(typeTF, canvas);
             typeHbox.setStyle("-fx-border-color: black");
 
-            infoVBox.getChildren().add(typeHbox);
+            //infoVBox.getChildren().add(typeHbox);
 
             // COORDS             
             String coordString = "(" + sprite.positionX + "," + sprite.positionY + ")";
             Label coords = new Label(coordString);
 
-            infoVBox.getChildren().add(coords);
+            infoVBox.getChildren().addAll(infoLabel, typeHbox, coords);
         }
         
         
