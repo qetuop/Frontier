@@ -25,33 +25,6 @@ import tiled.core.TileSet;
  * @author brian
  */
 public class AStar extends Application {
-
-    
-    
-    public class Node {
-        int x;
-        int y;
-        
-        int type; 
-                
-        int f;
-        int g;
-        int h;
-        
-        Node parent;
-        
-        Node(){
-            f = 0; // MAX value?
-            g = 0;
-            h = 0;
-            parent = null;            
-        }
-
-        @Override
-        public String toString() {
-            return "Node{" +  "x=" + x + ", y=" + y + ", f=" + f + ", g=" + g + ", h=" + h + ", type=" + type + ", parent=" + parent + '}';
-        }        
-    } // class Node
     
     int DIAG_COST = 14;
     int ORTH_COST = 10;

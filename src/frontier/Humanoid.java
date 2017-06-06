@@ -5,7 +5,6 @@
  */
 package frontier;
 
-import frontier.AStar.Node;
 import java.util.LinkedList;
 import tiled.core.Tile;
 
@@ -14,7 +13,7 @@ import tiled.core.Tile;
  * @author brian
  */
 public class Humanoid extends Sprite {
-    LinkedList<AStar.Node> path;
+    LinkedList<Node> path;
     
     public Humanoid(Tile tile, int startX, int startY) {
         super(tile, startX, startY);

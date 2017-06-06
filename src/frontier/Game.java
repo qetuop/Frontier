@@ -170,7 +170,7 @@ public class Game {
         Resource chest = createResource(0, 0, "storage", 2925);
         astar.spriteList.add(chest);
                 
-        LinkedList<AStar.Node> path = astar.findPath( player.positionX, player.positionY, 
+        LinkedList<Node> path = astar.findPath( player.positionX, player.positionY, 
                                                 resourceTree.positionX, resourceTree.positionY);
         player.path = path;
     }
