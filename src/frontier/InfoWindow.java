@@ -13,10 +13,13 @@ import java.util.logging.Logger;
 import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javax.swing.BorderFactory;
+import javax.swing.border.TitledBorder;
 import tiled.core.Map;
 import tiled.core.Tile;
 import tiled.core.TileLayer;
@@ -51,13 +54,33 @@ public class InfoWindow {
         infoVBox.setStyle("-fx-border-color: red");
         infoVBox.setPrefHeight(100);
         //infoVBox.setPrefWidth(100);
-               
+//        TitledBorder title;
+//        title = BorderFactory.createTitledBorder("title");
+//        infoVBox.setBorder(title);
+
         cmdVBox = new VBox();
         cmdVBox.setStyle("-fx-border-color: green");
         cmdVBox.setPrefWidth(100);
-        
+                
         mainHBox.getChildren().addAll(infoVBox, cmdVBox);
         
+        // create default windows
+        tileHighlight(0,0);
+        tileSelect(0,0);
+        
+    }
+    
+    void tileHighlight(int col, int row) {
+        ArrayList<Sprite> sprites = spriteMap.getCoord(row, col);
+        if ( sprites == null ) {
+            return;
+        }
+        infoVBox.getChildren().clear();
+        //System.out.println("sprites " + sprites.size());
+        for ( Sprite sprite : sprites ) {
+            VBox tmp = createInfoBox(sprite);
+            infoVBox.getChildren().add(tmp);
+        }
     }
     
     private VBox createInfoBox(Sprite sprite) {
@@ -91,7 +114,7 @@ public class InfoWindow {
             }
 
             HBox typeHbox = new HBox();
-            typeHbox.getChildren().addAll(typeTF, canvas);
+            typeHbox.getChildren().addAll(typeValue, canvas);
             typeHbox.setStyle("-fx-border-color: black");
 
             //infoVBox.getChildren().add(typeHbox);
@@ -108,16 +131,54 @@ public class InfoWindow {
         return infoBox;
     }
 
-    void update(int col, int row) {
+
+    void tileSelect(int col, int row) {
         ArrayList<Sprite> sprites = spriteMap.getCoord(row, col);
         if ( sprites == null ) {
             return;
         }
-        infoVBox.getChildren().clear();
-        //System.out.println("sprites " + sprites.size());
+        cmdVBox.getChildren().clear();
+        System.out.println("sprites " + sprites.size());
         for ( Sprite sprite : sprites ) {
-            VBox tmp = createInfoBox(sprite);
-            infoVBox.getChildren().add(tmp);
+            VBox tmp = createCmdBox(sprite);
+            cmdVBox.getChildren().add(tmp);
         }
+    }
+
+    private VBox createCmdBox(Sprite sprite) {
+        VBox vBox = new VBox();
+        vBox.setPrefWidth(100);
+
+        Label infoLabel = new Label("Command");
+        //infoBox.getChildren().add(infoLabel);
+        Button cmdButton = new Button("DO STUFF");
+        
+        Tile tile = sprite.tile;
+        if (tile != null) {
+            Label typeValue = new Label();
+            TextField typeTF = new TextField();
+                        
+            String type = sprite.getType();
+            String name = sprite.getName();
+            
+            switch ( name ) {
+                case "player" : {
+                    cmdButton.setText("COMMAND");
+                    break;
+                }
+                case "tree" : {
+                    cmdButton.setText("HARVEST");
+                    break;
+                }
+                case "storage" : {
+                    cmdButton.setText("STORE");
+                    break;
+                }
+            }
+            
+        }
+        vBox.getChildren().addAll(infoLabel, cmdButton);
+        
+        return vBox;
     }
 }

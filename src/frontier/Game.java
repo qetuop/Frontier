@@ -27,6 +27,7 @@ public class Game {
     GraphicsContext gc;
     AStar astar;
     InfoWindow infoWindow;
+    Canvas canvas;
     
     // internal board object?
     
@@ -60,7 +61,7 @@ public class Game {
         Map gameMap = gameBoard.getMap();
         Rectangle bounds = gameMap.getBounds();
 
-        Canvas canvas = new Canvas(bounds.width * gameMap.getTileWidth(),
+        canvas = new Canvas(bounds.width * gameMap.getTileWidth(),
                                    bounds.height * gameMap.getTileHeightMax());
         gc = canvas.getGraphicsContext2D();
         
@@ -79,7 +80,7 @@ public class Game {
         hbox.getChildren().add(infoWindow.mainHBox);
         
         mainPane.getChildren().add(hbox);         
-        mainPane.setPrefWidth(400);
+        mainPane.setPrefWidth(600);
     }
     
     public Humanoid createHumanoid(int startX, int startY) {
@@ -117,24 +118,10 @@ public class Game {
     }
     
     public Resource createResource(int startX, int startY, String name, int id) {
-        //Resource resource = null;
-        
-        /*
-        MapObject mapObject = gameBoard.getObject(type);
-        if ( mapObject != null ) {
-            startX = (int) (mapObject.getX()/mapObject.getWidth()); // --> Tile coord ex: (2,3)
-            startY = (int) (mapObject.getY()/mapObject.getHeight());
-        }
-        */
         Resource resource = getResource(name);
-//        if ( resource != null ) {
-//            startX = r.positionX;
-//            startY  = r.positionY;
-//        }
         
         TileSet tileSet = gameBoard.getMap().getTileSets().get(0);
         Tile tile = tileSet.getTile(id);
-        //resource = new Resource(tile,startX,startY);
         
         resources.add(resource);
         
@@ -172,7 +159,7 @@ public class Game {
                 
         LinkedList<Node> path = astar.findPath( player.positionX, player.positionY, 
                                                 resourceTree.positionX, resourceTree.positionY);
-        player.path = path;
+        //player.path = path;
     }
     
     public Resource getResource(String name){

@@ -17,10 +17,14 @@ public class Humanoid extends Sprite {
     
     public Humanoid(Tile tile, int startX, int startY) {
         super(tile, startX, startY);
+        path = new LinkedList<>();
     }
     
     public void moveChar() {
-        if ( path.size() == 0 ) return;
+        if ( path.size() == 0 ) {
+            return;
+        }
+        
         Node node = path.pop();
         if ( node != null ) {
             positionX = node.x;

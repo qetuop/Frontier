@@ -83,7 +83,16 @@ public class GameBoard {
             }
         }
 
+    } // render
+    
+    public int transToCol(double x){
+        return ( (int) (x / gameMap.getTileWidth()) );
     }
+    
+    public int transToRow(double y){
+        return ( (int) (y / gameMap.getTileHeightMax()) );
+    }
+    
     /*
     public void drawGameBoard(GraphicsContext gc) {
         // TODO: only draw whats on the screen

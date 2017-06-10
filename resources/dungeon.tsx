@@ -3,6 +3,7 @@
  <image source="../../../../Downloads/DungeonCrawl_ProjectUtumnoTileset.png" width="2048" height="1536"/>
  <tile id="132">
   <properties>
+   <property name="name" value="player"/>
    <property name="type" value="humanoid"/>
   </properties>
  </tile>

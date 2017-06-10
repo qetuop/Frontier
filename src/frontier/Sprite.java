@@ -76,6 +76,14 @@ public class Sprite {
         
         return rv;
     }
+   
+    public String getType() {
+        return getProp("type");
+    }
+    
+    public String getName() {
+        return getProp("name");
+    }
     
     
     

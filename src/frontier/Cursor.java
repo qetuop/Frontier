@@ -43,34 +43,50 @@ public class Cursor {
     }
         
         public void mouseMoved(MouseEvent event) {
-            int col = (int) (event.getX() / game.gameBoard.getMap().getTileWidth());
-            int row = (int) (event.getY() / game.gameBoard.getMap().getTileHeightMax());
+            double x = event.getX();
+            double y = event.getY();
+            
+            if ( x > game.canvas.getWidth() || y > game.canvas.getHeight() ) {
+                return;
+            }
+            
+            int col = game.gameBoard.transToCol(x);
+            int row = game.gameBoard.transToRow(y);
             //System.out.println(col + "," + row);
             highlightX = col;
             highlightY = row;   
             
             //game.infoWindow.col = col;
             //game.infoWindow.row = row;
-            game.infoWindow.update(col,row);           
+            
+            game.infoWindow.tileHighlight(col,row);           
         }
         
         public void mouseClicked(MouseEvent event) {
+            double x = event.getX();
+            double y = event.getY();
+            
+            if ( x > game.canvas.getWidth() || y > game.canvas.getHeight() ) {
+                return;
+            }
+            
+            int col = game.gameBoard.transToCol(x);
+            int row = game.gameBoard.transToRow(y);
+            //System.out.println(col + "," + row);
+            selectX = col;
+            selectY = row;
+            
             MouseButton button = event.getButton();
             if ( event.getButton() == MouseButton.PRIMARY ) {
                 isSelected = true;
+                game.infoWindow.tileSelect(col,row);
             }
             else if ( event.getButton() == MouseButton.SECONDARY ) {
                 isSelected = false;
             }
             else {
                 return;
-            }
-            
-            int col = (int) (event.getX() / game.gameBoard.getMap().getTileWidth());
-            int row = (int) (event.getY() / game.gameBoard.getMap().getTileHeightMax());
-            //System.out.println(col + "," + row);
-            selectX = col;
-            selectY = row;
+            } 
         }
         
         public void render(GraphicsContext gc) {
