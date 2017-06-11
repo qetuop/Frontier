@@ -26,7 +26,7 @@ public class SpriteMap {
     ArrayList<ArrayList<ArrayList<Sprite>>> map; // [col][row][Sprite list]
     //ArrayList<Resource> resources; // TODO: need better wy to store, map?
     
-    public SpriteMap(Map gameMap,ArrayList<Humanoid> humanoids, ArrayList<Resource>  resources) {
+    public SpriteMap(Map gameMap, ArrayList<Humanoid> humanoids, ArrayList<Resource> resources) {
         //resources = new ArrayList<>();
         
         map = new ArrayList<>();        
@@ -56,24 +56,24 @@ public class SpriteMap {
                         Properties prop = tile.getProperties();
                         String type = null;
                         try {
-                           type = (String) prop.get("type");
-                           //System.out.println("type="+type);
+                           type = (String) prop.get("type");                           
                         } catch (Exception ex) {
                             Logger.getLogger(Sprite.class.getName()).log(Level.INFO, null, ex);
                         }
                         
+                        // Add items loaded into various lists
                         if ( type == null ) {
                             map.get(row).get(col).add(new Sprite(tile, col, row));
                         }
-                        else if ( type.compareTo("resource") == 0 ) {
+                        else if ( type.compareTo("resource") == 0 ) {                            
                             Resource resource = new Resource(tile, col, row);
                             map.get(row).get(col).add(resource);
                             resources.add(resource);
                         }
                         else if ( type.compareTo("humanoid") == 0 ) {
-                            Humanoid sp = new Humanoid(tile, col, row);
-                            map.get(row).get(col).add(sp);
-                            //resources.add(resource);
+                            Humanoid humanoid = new Humanoid(tile, col, row);
+                            map.get(row).get(col).add(humanoid);
+                            humanoids.add(humanoid);
                         }
 
 
@@ -81,30 +81,28 @@ public class SpriteMap {
                 } // row
             } // TileLayer
             
-            // OBJECTS
-            else if ( layer instanceof ObjectGroup ) {
-                ObjectGroup objectGroup = (ObjectGroup)layer;
-                
-                for ( MapObject mapObject : objectGroup ) {
-                    Tile tile = mapObject.getTile();
-
-                    if (tile == null) {
-                        continue;
-                    }
-                    
-                     Properties prop = tile.getProperties();
-
-                        try {
-                           String type = (String) prop.get("type");
-                            //System.out.println("object type="+type);
-                        } catch (Exception ex) {
-                            Logger.getLogger(Sprite.class.getName()).log(Level.INFO, null, ex);
-                        }
-
-                    
-                } // for each object
-                
-            } // ObjectGroup
+//            // OBJECTS
+//            else if ( layer instanceof ObjectGroup ) {
+//                ObjectGroup objectGroup = (ObjectGroup)layer;
+//                
+//                for (MapObject mapObject : objectGroup) {
+//                    Tile tile = mapObject.getTile();
+//
+//                    if (tile == null) {
+//                        continue;
+//                    }
+//
+//                    Properties prop = tile.getProperties();
+//
+//                    try {
+//                        String type = (String) prop.get("type");
+//                        //System.out.println("object type="+type);
+//                    } catch (Exception ex) {
+//                        Logger.getLogger(Sprite.class.getName()).log(Level.INFO, null, ex);
+//                    }
+//                } // for each object
+//                
+//            } // ObjectGroup
             
         } // for each MapLayer
     } // ctor

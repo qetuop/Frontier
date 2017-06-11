@@ -54,7 +54,7 @@ public class Game {
     }
     
     public void createGameBoard(String mapName) {
-        gameBoard = new GameBoard("/home/brian/NetBeansProjects/JAVA/Frontier/resources/"+mapName);
+        gameBoard = new GameBoard("/home/brian/NetBeansProjects/JAVA/Frontier/resources/"+mapName, this);
         cursor = new Cursor(this); // TODO: should move out?  gameboard?
         
         ////////////////////
@@ -86,18 +86,6 @@ public class Game {
     public Humanoid createHumanoid(int startX, int startY) {
         Humanoid humanoid = null;
         
-        /*
-        MapObject mapObject = gameBoard.getObject("spawn");
-        if ( mapObject != null ) {
-            startX = (int) (mapObject.getX()/mapObject.getWidth()); // --> Tile coord ex: (2,3)
-            startY = (int) (mapObject.getY()/mapObject.getHeight());
-            
-            //double startXd = Math.max(0, mapObject.getX() - mapObject.getWidth()); // --> actual X,Y coord to draw at ex: (2*32, 3*32)
-            //double startYd = Math.max(0, mapObject.getY() - mapObject.getHeight());
-            
-            //System.out.println(startX + "," +startY + " / " + startXd + "," +  startYd);
-        }
-        */
         Resource resource = getResource("spawn");
         if ( resource != null ) {
             startX = resource.positionX;
@@ -107,12 +95,14 @@ public class Game {
         TileSet tileSet = gameBoard.getMap().getTileSets().get(0);
         Tile tile = tileSet.getTile(132);
         humanoid = new Humanoid(tile,startX,startY);
+        spriteMap.map.get(startY).get(startX).add(humanoid);
         
+        // need for the update function
         humanoids.add(humanoid);
         
-        // Move these into Game class
-        gameBoard.humanoidList.add(humanoid);
-        gameBoard.spriteList.add(humanoid);
+
+        //gameBoard.humanoidList.add(humanoid);
+        //gameBoard.spriteList.add(humanoid);
         
         return humanoid;
     }
@@ -123,11 +113,11 @@ public class Game {
         TileSet tileSet = gameBoard.getMap().getTileSets().get(0);
         Tile tile = tileSet.getTile(id);
         
-        resources.add(resource);
+        //resources.add(resource);
         
         // Move these into Game class
-        gameBoard.resourceList.add(resource);
-        gameBoard.spriteList.add(resource);
+        //gameBoard.resourceList.add(resource);
+        //gameBoard.spriteList.add(resource);
         
         return resource;
     }
@@ -138,8 +128,7 @@ public class Game {
         }
     }
     
-    public void render() {
-        //gameBoard.drawGameBoard(gc);
+    public void render() {        
         gameBoard.render(spriteMap,gc);
         cursor.render(gc);
     }
@@ -147,19 +136,19 @@ public class Game {
     void TMP_HACK() {
         //////////// PLAYER //////////
         Humanoid player = createHumanoid(0,0);
-        astar.spriteList.add(player);
+        //astar.spriteList.add(player);
         
         //////////// TREE //////////
         Resource resourceTree = createResource(0, 0, "tree", 1164);
-        astar.spriteList.add(resourceTree);
+        //astar.spriteList.add(resourceTree);
                
         //////////// CHEST //////////
         Resource chest = createResource(0, 0, "storage", 2925);
-        astar.spriteList.add(chest);
+        //astar.spriteList.add(chest);
                 
         LinkedList<Node> path = astar.findPath( player.positionX, player.positionY, 
                                                 resourceTree.positionX, resourceTree.positionY);
-        //player.path = path;
+        player.path = path;
     }
     
     public Resource getResource(String name){

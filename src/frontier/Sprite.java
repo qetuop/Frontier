@@ -20,7 +20,7 @@ import tiled.core.Tile;
  */
 public class Sprite {
     // TODO: make private with gett/setters
-    private Image image;
+    public Image image;
     public Tile tile;
     public int positionX; // --> Tile coord ex: (2,3), do not draw at this location --> 
     public int positionY;    

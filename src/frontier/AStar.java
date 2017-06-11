@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import javafx.application.Application;
 import static javafx.application.Platform.exit;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.apache.commons.math3.ml.distance.EuclideanDistance;
 import tiled.core.Map;
@@ -38,15 +39,19 @@ public class AStar extends Application {
     
     LinkedList<Node> finalPath = new LinkedList();
     
-    public ArrayList<Sprite> spriteList;
+    //public ArrayList<Sprite> spriteList;
     
+    Node[][] nodeArr;
     
     Map map;
+    SpriteMap spriteMap;
     
     public AStar(Map map, SpriteMap spriteMap) {
-        spriteList   = new ArrayList<>();
+        //spriteList   = new ArrayList<>();
         
         this.map = map;
+        this.spriteMap = spriteMap;
+        
         TileSet tileSet = map.getTileSets().get(0);
         for (Tile tile : tileSet) {
             Properties prop = tile.getProperties();
@@ -56,29 +61,20 @@ public class AStar extends Application {
         }                
     }
     
-    public void updateBlocked() {
-        for ( Sprite sprite : spriteList ){
-            Properties prop = sprite.tile.getProperties();
-            if (Boolean.parseBoolean((String) prop.get("blocked"))) {
-                blockedTypes.add(sprite.tile.getId());
-            }
-        }
-    }
+//    public void updateBlocked() {
+//        for ( Sprite sprite : spriteList ){
+//            Properties prop = sprite.tile.getProperties();
+//            if (Boolean.parseBoolean((String) prop.get("blocked"))) {
+//                blockedTypes.add(sprite.tile.getId());
+//            }
+//        }
+//    }
     
-    public LinkedList<Node> findPath(int startX, int startY, int endX, int endY){
-        updateBlocked();
-        
-        // for look at only base layer
-        TileLayer tileLayer = (TileLayer) map.getLayer(0);
-        
-        // TODO: can probably just create a mapping Tile:Node so i don't
-        // have to re-create the entire map
-        // or...? use the Properties field for a tile?  parent = ?
-        // likely will have to read the map into my own structure
+    private void createNodeArray(TileLayer tileLayer) {
         int numCols = tileLayer.getWidth();
         int numRows = tileLayer.getHeight();
         
-        Node[][] nodeArr = new Node[numRows][numCols]; // row major order
+        nodeArr = new Node[numRows][numCols]; // row major order
         //System.out.println("numRows="+ numRows +", numCols=" + numCols);
         for (int col = 0; col < numCols; col++) {
             for (int row = 0; row < numCols; row++) {
@@ -93,25 +89,85 @@ public class AStar extends Application {
                 nodeArr[row][col].x = col;
                 nodeArr[row][col].y = row;         
                 nodeArr[row][col].type = tile.getId();  // tile set type NOT map type (1 off)
+                nodeArr[row][col].tile = tile;
+                
+                Properties prop = tile.getProperties();
+                if (Boolean.parseBoolean((String) prop.get("blocked"))) {
+                    nodeArr[row][col].blocked = true;
+                }
+
             } // width
         } // height
+    }
+    private void createNodeArray() {
+        int numRows = spriteMap.map.size(); 
+        int numCols = spriteMap.map.get(0).size();
+               
+        nodeArr = new Node[numRows][numCols]; // row major order
+        ArrayList<ArrayList<ArrayList<Sprite>>> map = spriteMap.map;
+        for (int row = 0; row < map.size(); row++) {
+            for (int col = 0; col < map.get(row).size(); col++) {
+                
+                // create node here, use 1st node in sprite array?
+                nodeArr[row][col] = new Node();
+                nodeArr[row][col].x = col;
+                nodeArr[row][col].y = row;         
+                //
+                
+                Sprite sprite = map.get(row).get(col).get(0);
+                nodeArr[row][col].type = sprite.tile.getId();  // tile set type NOT map type (1 off)
+                nodeArr[row][col].tile = sprite.tile;
+                
+                for (int spriteNum = 0; spriteNum < map.get(row).get(col).size(); spriteNum++) {
+                    sprite = map.get(row).get(col).get(spriteNum);
+                    if ( sprite.isBlocked()) {
+                        nodeArr[row][col].blocked = true;
+                    }                    
+                }
+            }
+        }
+    } // createNodeArray
+    
+    // TODO: Need to use SpriteMap and the final array list
+    public LinkedList<Node> findPath(int startX, int startY, int endX, int endY){
+        //updateBlocked();
         
+        // for look at only base layer
+        TileLayer tileLayer = (TileLayer) map.getLayer(0);
+        
+        // TODO: can probably just create a mapping Tile:Node so i don't
+        // have to re-create the entire map
+        // or...? use the Properties field for a tile?  parent = ?
+        // likely will have to read the map into my own structure
+        //int numCols = tileLayer.getWidth();
+        //int numRows = tileLayer.getHeight();
+        
+        int numRows = spriteMap.map.size(); 
+        int numCols = spriteMap.map.get(0).size();
+        
+        System.out.println("row " + numRows + " col " + numCols);
+        
+        //createNodeArray(tileLayer);
+        createNodeArray();
         //
         
 
         startNode = nodeArr[startY][startX];
         endNode = nodeArr[endY][endX];
         
+        // tmp hack - blocked nodes never pass isValid test  TODO: how do i fix this?
+        endNode.blocked = false;
+        
         openSet.add(startNode);
         
-        //System.out.println("START NODE: " + startNode);
-        //System.out.println("Dest  NODE: " + endNode);             
+        System.out.println("START NODE: " + startNode);
+        System.out.println("Dest  NODE: " + endNode);             
         
-        Node current = null;
+        Node current;
         // while the openSet is not empty AND the end not reached
         while ( !openSet.isEmpty() && !closedSet.contains(endNode) ) {
             current = lowestF(openSet);
-            //System.out.println("lowest="+current);
+            System.out.println("lowest="+current);
             if ( current == endNode ){
                 createPath(current);
                 break;
@@ -138,8 +194,8 @@ public class AStar extends Application {
         
         
         
-        //System.out.println("final path:");
-        //finalPath.forEach(System.out::println);
+        System.out.println("final path:");
+        finalPath.forEach(System.out::println);
         
         return finalPath;
 
@@ -181,7 +237,7 @@ public class AStar extends Application {
     
     // Manhattan method
     private int calcH(Node node) {
-        int value = 0;
+        int value;
         
         int dist = Math.abs(node.x - endNode.x) + Math.abs(node.y - endNode.y);
         value = dist*ORTH_COST;
@@ -229,7 +285,7 @@ public class AStar extends Application {
     }
     
     boolean isValid(Node node){
-        boolean valid = true;
+        boolean valid;
         
 //        Predicate<Node> isClosed = x -> (closedSet.contains(x)); // has this node been process/rejected alreayd
 //        Predicate<Node> isBockedType = x -> (blockedTypes.contains(x.type)); // is this background tile a blocked type ex: stone
@@ -251,7 +307,12 @@ public class AStar extends Application {
 
         valid = (node != null &&
                 !closedSet.contains(node) &&
-                !blockedTypes.contains(node.type));
+                !node.blocked);
+        
+//        valid = (node != null &&
+//                !closedSet.contains(node) &&
+//                !blockedTypes.contains(node.type));
+        
 //
 //        if (closedSet.contains(node)) {
 //            valid = false;
@@ -280,28 +341,32 @@ public class AStar extends Application {
         
         // remove final node if blocked
         Node lastNode = finalPath.getLast();
-        for ( Sprite sprite : spriteList ){
-            if ( (sprite.positionX==lastNode.x && sprite.positionY==lastNode.y) && 
-                  sprite.isBlocked() ) {
-                finalPath.removeLast();
-                break;
-            }
-        }        
+        if ( lastNode.blocked == true ) {
+            finalPath.removeLast();
+        }
+        
+//        for ( Sprite sprite : spriteList ){
+//            if ( (sprite.positionX==lastNode.x && sprite.positionY==lastNode.y) && 
+//                  sprite.isBlocked() ) {
+//                finalPath.removeLast();
+//                break;
+//            }
+//        }        
     }
     
     @Override
     public void start(Stage theStage) {
        //String mapName = "astar_2x1.tmx";
        //String mapName = "astar_3x2.tmx";
-       String mapName = "astar_8x6.tmx";
-       
-       final GameBoard gameBoard = new GameBoard("/home/brian/NetBeansProjects/JAVA/GameTest/resources/"+mapName);
-       this.map = gameBoard.getMap();
-       TileLayer tileLayer = (TileLayer) map.getLayer(1);
-
-       // System.out.println("sarttile " + startTile.);
-       findPath(2,2,6,2);
-       exit();
+//       String mapName = "astar_8x6.tmx";
+//       
+//       final GameBoard gameBoard = new GameBoard("/home/brian/NetBeansProjects/JAVA/GameTest/resources/"+mapName);
+//       this.map = gameBoard.getMap();
+//       TileLayer tileLayer = (TileLayer) map.getLayer(1);
+//
+//       // System.out.println("sarttile " + startTile.);
+//       findPath(2,2,6,2);
+//       exit();
     }
     
     public static void main(String[] args) {

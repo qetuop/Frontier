@@ -25,13 +25,16 @@ import tiled.io.TMXMapReader;
  */
 public class GameBoard {
     private Map gameMap;
+    private Game game;
     
     // move these to game class?
-    public ArrayList<Humanoid> humanoidList;
-    public ArrayList<Resource> resourceList;
-    public ArrayList<Sprite> spriteList;
+    //public ArrayList<Humanoid> humanoidList;
+    //public ArrayList<Resource> resourceList;
+    //public ArrayList<Sprite> spriteList;
         
-    public GameBoard(String tmx) {
+    public GameBoard(String tmx, Game gameIn) {
+        game = gameIn;
+        
         TMXMapReader tmxMapReader = new TMXMapReader();
         try {
              gameMap = tmxMapReader.readMap(tmx);
@@ -40,9 +43,9 @@ public class GameBoard {
             Logger.getLogger(GameBoard.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        humanoidList = new ArrayList<>();
-        resourceList = new ArrayList<>();
-        spriteList   = new ArrayList<>();
+        //humanoidList = new ArrayList<>();
+        //resourceList = new ArrayList<>();
+        //spriteList   = new ArrayList<>();
     }
     
     public Map getMap() {
@@ -61,26 +64,17 @@ public class GameBoard {
                         continue;
                     }
 
-                    try {
-                        Image image = Utils.createImage(tile.getImage());
-                        gc.drawImage(image, col * tile.getWidth(), row * tile.getHeight());
-                    } catch (IOException ex) {
-                        Logger.getLogger(GameBoard.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    Image image = sprite.image;
+                    gc.drawImage(image, col * tile.getWidth(), row * tile.getHeight());
                 }
             }
         }
 
         // draw humanoids
-        for (Sprite sprite : spriteList) {
-            try {
-
-                Image image = Utils.createImage(sprite.tile.getImage());
-
-                gc.drawImage(image, sprite.positionX * image.getWidth(), sprite.positionY * image.getHeight());
-            } catch (IOException ex) {
-                Logger.getLogger(GameBoard.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        for (Humanoid humanoid : game.humanoids) {
+            gc.drawImage(humanoid.image, 
+                    humanoid.positionX * humanoid.image.getWidth(), 
+                    humanoid.positionY * humanoid.image.getHeight());           
         }
 
     } // render

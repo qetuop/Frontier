@@ -21,7 +21,7 @@ public class Humanoid extends Sprite {
     }
     
     public void moveChar() {
-        if ( path.size() == 0 ) {
+        if ( path.isEmpty() ) {
             return;
         }
         

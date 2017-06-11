@@ -5,6 +5,8 @@
  */
 package frontier;
 
+import tiled.core.Tile;
+
 /**
  *
  * @author brian
@@ -15,6 +17,10 @@ public class Node {
     int y;
 
     int type;
+    
+    boolean blocked;
+    
+    Tile tile;
 
     int f;
     int g;
@@ -27,10 +33,15 @@ public class Node {
         g = 0;
         h = 0;
         parent = null;
+        blocked = false;
+        tile = new Tile();
     }
 
     @Override
     public String toString() {
-        return "Node{" + "x=" + x + ", y=" + y + ", f=" + f + ", g=" + g + ", h=" + h + ", type=" + type + ", parent=" + parent + '}';
+        return "Node{" + "x=" + x + ", y=" + y + 
+               ", f=" + f + ", g=" + g + ", h=" + h + 
+                ", type=" + type + ", blocked=" + blocked +
+                ", parent=" + parent + '}';
     }
 } // class Node

@@ -9,36 +9,43 @@
  </tile>
  <tile id="960">
   <properties>
+   <property name="blocked" type="bool" value="false"/>
    <property name="name" value="grass"/>
   </properties>
  </tile>
  <tile id="961">
   <properties>
+   <property name="blocked" type="bool" value="false"/>
    <property name="name" value="grass"/>
   </properties>
  </tile>
  <tile id="962">
   <properties>
+   <property name="blocked" type="bool" value="false"/>
    <property name="name" value="grass"/>
   </properties>
  </tile>
  <tile id="963">
   <properties>
+   <property name="blocked" type="bool" value="false"/>
    <property name="name" value="grass"/>
   </properties>
  </tile>
  <tile id="964">
   <properties>
+   <property name="blocked" type="bool" value="false"/>
    <property name="name" value="grass"/>
   </properties>
  </tile>
  <tile id="965">
   <properties>
+   <property name="blocked" type="bool" value="false"/>
    <property name="name" value="grass"/>
   </properties>
  </tile>
  <tile id="966">
   <properties>
+   <property name="blocked" type="bool" value="false"/>
    <property name="name" value="grass"/>
   </properties>
  </tile>
