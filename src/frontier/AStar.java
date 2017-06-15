@@ -32,7 +32,7 @@ public class AStar extends Application {
     
     Set openSet         = new HashSet();
     Set closedSet       = new HashSet();
-    Set blockedTypes    = new HashSet(); // tile set type NOT map type (1 off)
+    //Set blockedTypes    = new HashSet(); // tile set type NOT map type (1 off)
     
     Node startNode = null;
     Node endNode     = null;
@@ -52,13 +52,13 @@ public class AStar extends Application {
         this.map = map;
         this.spriteMap = spriteMap;
         
-        TileSet tileSet = map.getTileSets().get(0);
-        for (Tile tile : tileSet) {
-            Properties prop = tile.getProperties();
-            if (Boolean.parseBoolean((String) prop.get("blocked"))) {
-                blockedTypes.add(tile.getId());
-            }
-        }                
+//        TileSet tileSet = map.getTileSets().get(0);
+//        for (Tile tile : tileSet) {
+//            Properties prop = tile.getProperties();
+//            if (Boolean.parseBoolean((String) prop.get("blocked"))) {
+//                blockedTypes.add(tile.getId());
+//            }
+//        }                
     }
     
 //    public void updateBlocked() {
@@ -70,35 +70,36 @@ public class AStar extends Application {
 //        }
 //    }
     
-    private void createNodeArray(TileLayer tileLayer) {
-        int numCols = tileLayer.getWidth();
-        int numRows = tileLayer.getHeight();
-        
-        nodeArr = new Node[numRows][numCols]; // row major order
-        //System.out.println("numRows="+ numRows +", numCols=" + numCols);
-        for (int col = 0; col < numCols; col++) {
-            for (int row = 0; row < numCols; row++) {
-               
-                Tile tile = tileLayer.getTileAt(col, row);
-
-                if (tile == null) {
-                    continue;
-                }
-                
-                nodeArr[row][col] = new Node();
-                nodeArr[row][col].x = col;
-                nodeArr[row][col].y = row;         
-                nodeArr[row][col].type = tile.getId();  // tile set type NOT map type (1 off)
-                nodeArr[row][col].tile = tile;
-                
-                Properties prop = tile.getProperties();
-                if (Boolean.parseBoolean((String) prop.get("blocked"))) {
-                    nodeArr[row][col].blocked = true;
-                }
-
-            } // width
-        } // height
-    }
+//    private void createNodeArray(TileLayer tileLayer) {
+//        int numCols = tileLayer.getWidth();
+//        int numRows = tileLayer.getHeight();
+//        
+//        nodeArr = new Node[numRows][numCols]; // row major order
+//        //System.out.println("numRows="+ numRows +", numCols=" + numCols);
+//        for (int col = 0; col < numCols; col++) {
+//            for (int row = 0; row < numCols; row++) {
+//               
+//                Tile tile = tileLayer.getTileAt(col, row);
+//
+//                if (tile == null) {
+//                    continue;
+//                }
+//                
+//                nodeArr[row][col] = new Node();
+//                nodeArr[row][col].x = col;
+//                nodeArr[row][col].y = row;         
+//                nodeArr[row][col].type = tile.getId();  // tile set type NOT map type (1 off)
+//                nodeArr[row][col].tile = tile;
+//                
+//                Properties prop = tile.getProperties();
+//                if (Boolean.parseBoolean((String) prop.get("blocked"))) {
+//                    nodeArr[row][col].blocked = true;
+//                }
+//
+//            } // width
+//        } // height
+//    }
+    
     private void createNodeArray() {
         int numRows = spriteMap.map.size(); 
         int numCols = spriteMap.map.get(0).size();
@@ -145,18 +146,11 @@ public class AStar extends Application {
         int numRows = spriteMap.map.size(); 
         int numCols = spriteMap.map.get(0).size();
         
-        System.out.println("row " + numRows + " col " + numCols);
-        
-        //createNodeArray(tileLayer);
         createNodeArray();
-        //
-        
 
         startNode = nodeArr[startY][startX];
         endNode = nodeArr[endY][endX];
-        
-        // tmp hack - blocked nodes never pass isValid test  TODO: how do i fix this?
-        endNode.blocked = false;
+
         
         openSet.add(startNode);
         
@@ -306,8 +300,9 @@ public class AStar extends Application {
 //        System.out.println("blocked="+blocked);
 
         valid = (node != null &&
-                !closedSet.contains(node) &&
-                !node.blocked);
+                node == endNode ||
+                (!closedSet.contains(node) &&
+                !node.blocked));
         
 //        valid = (node != null &&
 //                !closedSet.contains(node) &&
