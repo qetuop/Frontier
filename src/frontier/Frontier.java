@@ -44,6 +44,7 @@ public class Frontier extends Application {
             System.out.println("code: " + code);
         });
       
+        // TODO: move to Cursor, pass Scene into Game to Cursor
         // highlight - mouse move
         theScene.setOnMouseMoved((MouseEvent event) -> {                        
             game.cursor.mouseMoved(event);
